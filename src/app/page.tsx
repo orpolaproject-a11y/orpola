@@ -1,33 +1,53 @@
 import Link from "next/link";
+import { ClubsMapLoader } from "@/components/ClubsMapLoader";
+import { getClubsAroundTelAviv } from "@/lib/clubs";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const clubs = await getClubsAroundTelAviv();
+
   return (
-    <div className="mx-auto max-w-6xl px-4 py-16">
-      <section className="rounded-3xl bg-gradient-to-br from-emerald-600 to-teal-700 px-8 py-16 text-white shadow-lg">
-        <p className="text-sm font-medium uppercase tracking-wider text-emerald-100">Israel</p>
-        <h1 className="mt-2 max-w-2xl text-4xl font-bold leading-tight md:text-5xl">
-          Find your running & cycling community
-        </h1>
-        <p className="mt-4 max-w-xl text-lg text-emerald-50">
-          Discover clubs near you. Compare schedules, prices, and reviews — all in one place.
+    <div className="mx-auto max-w-6xl px-4 py-10">
+      <section className="mb-8">
+        <p className="text-sm font-medium uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+          Tel Aviv area
         </p>
-        <div className="mt-8 flex flex-wrap gap-4">
+        <h1 className="mt-1 text-3xl font-bold tracking-tight md:text-4xl">
+          Find running & cycling clubs near you
+        </h1>
+        <p className="mt-2 max-w-2xl text-zinc-600 dark:text-zinc-400">
+          Each pin marks where a club usually meets for group runs and rides. Tap a pin for details.
+        </p>
+      </section>
+
+      <section>
+        <div className="mb-3 flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <h2 className="text-lg font-semibold">Club map</h2>
+            <p className="text-sm text-zinc-500">
+              {clubs.length} club{clubs.length === 1 ? "" : "s"} around Tel Aviv
+            </p>
+          </div>
           <Link
             href="/clubs"
-            className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-emerald-800 shadow hover:bg-emerald-50"
+            className="text-sm font-medium text-emerald-700 hover:underline dark:text-emerald-400"
           >
-            Browse clubs
+            View all clubs →
           </Link>
         </div>
+        <ClubsMapLoader clubs={clubs} />
       </section>
-      <section className="mt-16 grid gap-8 md:grid-cols-3">
+
+      <section className="mt-10 grid gap-6 sm:grid-cols-3">
         {[
-          { title: "Map & search", text: "Filter by city, sport, and price." },
-          { title: "Reviews", text: "Real feedback from runners and cyclists." },
-          { title: "Coaches", text: "Find trainers for groups and personal coaching." },
+          { title: "Meeting points", text: "See where each group starts before you join." },
+          { title: "Schedules & prices", text: "Compare when clubs meet and what they charge." },
+          { title: "Reviews", text: "Read feedback from runners and cyclists." },
         ].map((item) => (
-          <div key={item.title} className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
-            <h2 className="font-semibold">{item.title}</h2>
+          <div
+            key={item.title}
+            className="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900"
+          >
+            <h3 className="font-semibold">{item.title}</h3>
             <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{item.text}</p>
           </div>
         ))}
